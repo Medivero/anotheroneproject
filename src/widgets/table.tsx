@@ -22,9 +22,7 @@ export default function TableData({ dbData }: { dbData: any[] }) {
   }) => {
     const row = dbData[index];
     return (
-      <div
-        style={{ ...style, display: "flex", borderBottom: "1px solid" }}
-      >
+      <div style={{ ...style, display: "flex", borderBottom: "1px solid" }}>
         {allKeys.map((key) => (
           <div
             key={key}
