@@ -1,54 +1,40 @@
-# React + TypeScript + Vite
+## Таблица-приложение
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Какие инструменты были использованы? 
 
-Currently, two official plugins are available:
+React
+TS
+Vite
+react-hook-form ( удобное управление формами без взаимодействия с DOM )
+react-window (виртуализация) 
+tailwindcss (быстрые стили)
+json-server
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Как запустить?
 
-## Expanding the ESLint configuration
+перейти в папку backend и прописать npx json-server db.json
+потом перейти в корневую папку -> `npm i` -> `npm run dev`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Какой функционал?
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+  1. Добавление новых записей.
+  2. Добавление новых полей.
+  3. Виртуализация таблицы.
+  4. Обращение к бэкэнду через Rest API.
+  5. Отображение таблицы.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Немного про поля:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+  1. Динамическое расширение таблицы в зависимости от количества полей, так что их может быть произвольное количество (на данный момент в    базе данных около 16 полей). 
+  Алгоритм таков: по загрузке страницы делается запрос на backend сервер (в нашем случае это json-server). Полученные данные сохраняются в состояние `dbData`. Эти же данные передаются пропсом в компонент <TableData/> как dbData. В этом компоненте в первую очередь (useEffect()) мы получаем все возможные ключи у объектов массива `dbData`, они же сохраняются в стейт `AllKeys`. Далее на основе этих ключей отрисовывается хэадер таблицы.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+  2. Кнопка добавления новых данных(записи) в таблицу имеет свойство disabled на время выполнения запроса, однако кнопка добавления нового
+  поля не имеет такого, в связи с тем, что добавление нового поля не взаимодействует никак с запросами. Оно лишь расширяет список "Ключей" у будущего объекта и хранятся на клиенте до первой перезагрузки страницы.
+
+  3. В ТЗ было указано, что у полей должна быть валидация, но в связи с тем, что я сделал динамическое добавление полей, то все сохраняется в типе String.
+  
+
+## Почему отсутствует state-manager?
+  Приложение слишком маленькое для использования MobX/Redux/Zustand и подобных библиотек. Нет какой-то глубокой вложенности,
+  или непредсказуемого поведения. К тому же для такого маленького приложения использовать, например, Redux было бы, наоборот,
+  хуже в плане производительности. Так что, как по мне, в этом случае лучше использовать useEffect() и useState().

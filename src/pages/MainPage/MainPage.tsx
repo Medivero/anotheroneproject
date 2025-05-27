@@ -4,7 +4,7 @@ import TableData from "../../widgets/table";
 import { useForm } from "react-hook-form";
 import postData from "../../services/postData";
 
-function ResolveData(setDbData: Function, setKeys: Function) {
+function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
   getData()
     .then((data) => {
       setDbData(data);
@@ -14,21 +14,25 @@ function ResolveData(setDbData: Function, setKeys: Function) {
       setKeys(
         Array.from(new Set(data.flatMap((obj: String) => Object.keys(obj))))
       );
+      setAddDataRequset(false)
     });
 }
 
 function MainPage() {
   const [dbData, setDbData] = useState([]);
   let [keys, setKeys] = useState<string[]>([]);
-  const { register, handleSubmit, reset } = useForm();
+  const [AddDataRequset,setAddDataRequset] = useState(false);
+
+  const formNewData = useForm();
   const formPole = useForm();
 
   useEffect(() => {
-    ResolveData(setDbData, setKeys);
+    ResolveData({setDbData,setKeys,setAddDataRequset});
   }, []);
 
   const getInputForm = (data: any) => {
-    reset();
+    setAddDataRequset(false)
+    formNewData.reset();
     let newobj: any = {};
     const lastId = dbData[dbData.length - 1]["id"];
     for (const key in data) {
@@ -42,11 +46,11 @@ function MainPage() {
      */
     newobj["id"] = String(Number(lastId) + 1);
     postData(newobj);
-    ResolveData(setDbData, setKeys);
+    ResolveData({setDbData,setKeys,setAddDataRequset});
   };
 
   const getNewPole = (data: any) => {
-    reset();
+    formPole.reset();
     const pole = String(data["pole"]);
     let newKeys = [...keys];
     newKeys.push(pole);
@@ -56,13 +60,13 @@ function MainPage() {
     <>
       <div className="p-[20px] flex flex-col gap-[20px]">
         <div className="w-full flex justify-center">
-          <span>Таблица данных</span>
+          <span className="text-[36px]">Таблица данных</span>
         </div>
-        <span>Хотите добавить данные?</span>
+        <span>Хотите добавить данные? Введите их в ячейки</span>
         <div className="flex gap-[20px]">
           {keys ? (
             <form
-              onSubmit={handleSubmit(getInputForm)}
+              onSubmit={formNewData.handleSubmit(getInputForm)}
               className="w-full flex flex-col gap-[20px]"
             >
               <div className="flex flex-wrap gap-[10px]">
@@ -74,7 +78,7 @@ function MainPage() {
                     } flex w-[100px] flex-col gap-[2.5px] `}
                   >
                     <input
-                      {...register(item)}
+                      {...formNewData.register(item)}
                       name={item}
                       className="border px-[10px] rounded"
                       placeholder={item}
@@ -83,7 +87,7 @@ function MainPage() {
                   </div>
                 ))}
               </div>
-              <button className="border cursor-pointer rounded bg-black hover:bg-white hover:text-black w-fit px-[10px]">
+              <button disabled={AddDataRequset} className="border disabled:text-gray-600 disabled:cursor-not-allowed cursor-pointer rounded bg-black hover:bg-white hover:text-black w-fit px-[10px]">
                 Добавить данные
               </button>
             </form>
@@ -101,14 +105,15 @@ function MainPage() {
               {...formPole.register("pole")}
               className="border px-[10px] max-w-[300px]"
               type="text"
+              
               placeholder="Новое поле"
             />
-            <button className="w-fit border rounded cursor-pointer bg-black hover:bg-white hover:text-black px-[20px]">
+            <button className="w-fit border disabled:text-gray-600 disabled:cursor-not-allowed rounded cursor-pointer bg-black hover:bg-white hover:text-black px-[20px]">
               Добавить новое поле
             </button>
           </form>
         </div>
-        <div className="">
+        <div className="p-[30px] bg-gray-600 rounded-lg">
           <TableData dbData={dbData}></TableData>
         </div>
       </div>
