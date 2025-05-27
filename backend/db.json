@@ -1,13 +1,49 @@
 {
   "posts": [
-    { "id": "1", "title": "a title", "views": 100 },
-    { "id": "2", "title": "another title", "views": 200 }
-  ],
-  "comments": [
-    { "id": "1", "text": "a comment about post 1", "postId": "1" },
-    { "id": "2", "text": "another comment about post 1", "postId": "1" }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+    {
+      "id": "1",
+      "title": "a title",
+      "views": 100,
+      "name": "dima",
+      "not_views": "aaaa",
+      "agree": "123123"
+    },
+    {
+      "id": "2",
+      "title": "another title",
+      "views": 200,
+      "name": "Artyom",
+      "something": 123
+    },
+    {
+      "id": "3",
+      "title": "another title",
+      "views": 200,
+      "something": "",
+      "not_views": "4234"
+    },
+    {
+      "id": "5",
+      "title": "somethin new",
+      "not_views": 5555,
+      "agree": "7754",
+      "valid": "fdfasdfa",
+      "stalker": "asasaas"
+    },
+    {
+      "id": "9cdb",
+      "title": "5"
+    },
+    {
+      "id": "6",
+      "title": "5",
+      "views": "",
+      "name": "",
+      "not_views": "",
+      "agree": "",
+      "something": "",
+      "valid": "",
+      "stalker": ""
+    }
+  ]
 }
