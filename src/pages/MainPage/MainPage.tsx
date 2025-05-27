@@ -19,17 +19,20 @@ function ResolveData(setDbData: Function, setKeys: Function) {
 
 function MainPage() {
   const [dbData, setDbData] = useState([]);
-  let [keys, setKeys] = useState([]);
+  let [keys, setKeys] = useState<string[]>([]);
+  const { register, handleSubmit, reset } = useForm();
+  const formPole = useForm();
+
   useEffect(() => {
     ResolveData(setDbData, setKeys);
   }, []);
-  const { register, handleSubmit, reset } = useForm();
+
   const getInputForm = (data: any) => {
     reset();
     let newobj: any = {};
     const lastId = dbData[dbData.length - 1]["id"];
     for (const key in data) {
-      if (data[key] !== "") {
+      if (data[key] !== "" && data[key] !== " ") {
         newobj[key] = data[key];
       }
     }
@@ -42,9 +45,16 @@ function MainPage() {
     ResolveData(setDbData, setKeys);
   };
 
+  const getNewPole = (data: any) => {
+    reset();
+    const pole = String(data["pole"]);
+    let newKeys = [...keys];
+    newKeys.push(pole);
+    setKeys(newKeys);
+  };
   return (
     <>
-      <div className="p-[20px] flex flex-col">
+      <div className="p-[20px] flex flex-col gap-[20px]">
         <div className="w-full flex justify-center">
           <span>Таблица данных</span>
         </div>
@@ -81,7 +91,24 @@ function MainPage() {
             ""
           )}
         </div>
-        <div className="mt-[20px]">
+        <div className="flex flex-col">
+          <span>Добавить новое поле?</span>
+          <form
+            onSubmit={formPole.handleSubmit(getNewPole)}
+            className="flex flex-col gap-[10px]"
+          >
+            <input
+              {...formPole.register("pole")}
+              className="border px-[10px] max-w-[300px]"
+              type="text"
+              placeholder="Новое поле"
+            />
+            <button className="w-fit border rounded cursor-pointer bg-black hover:bg-white hover:text-black px-[20px]">
+              Добавить новое поле
+            </button>
+          </form>
+        </div>
+        <div className="">
           <TableData dbData={dbData}></TableData>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FixedSizeList as List } from "react-window";
+import { FixedSizeList as List } from "react-window"; 
 import "react-virtualized/styles.css";
 
 export default function TableData({ dbData }: { dbData: any[] }) {
@@ -26,7 +26,7 @@ export default function TableData({ dbData }: { dbData: any[] }) {
         {allKeys.map((key) => (
           <div
             key={key}
-            style={{ flex: 1, padding: "10px", borderRight: "1px solid" }}
+            style={{ flex: 1, padding: "10px", borderRight: "1px solid",wordBreak:"break-word" }}
           >
             {row[key]}
           </div>
@@ -47,13 +47,13 @@ export default function TableData({ dbData }: { dbData: any[] }) {
         {allKeys.map((key) => (
           <div
             key={key}
-            style={{ flex: 1, padding: "12px", borderRight: "2px solid" }}
+            style={{ flex: 1, padding: "10px", borderRight: "1px solid",wordBreak:"break-word" }}
           >
             {key}
           </div>
         ))}
       </div>
-      <List height={400} itemCount={dbData.length} itemSize={50} width="100%">
+      <List className="no-scrollbar" height={400} itemCount={dbData.length} itemSize={50} width="100%">
         {Row}
       </List>
     </div>
