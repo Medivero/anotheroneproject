@@ -5,6 +5,7 @@ import "react-virtualized/styles.css";
 export default function TableData({ dbData }: { dbData: any[] }) {
   const [allKeys, setAllKeys] = useState<string[]>([]);
   const [textSizeState,setTextSizeState] = useState(0);
+  
 
   useEffect(() => {
     if (dbData) {
@@ -50,7 +51,6 @@ export default function TableData({ dbData }: { dbData: any[] }) {
   return (
     <div>
       <div
-        className="bg-black"
         style={{
           display: "flex",
           borderBottom: "2px solid",
@@ -66,7 +66,7 @@ export default function TableData({ dbData }: { dbData: any[] }) {
           </div>
         ))}
       </div>
-      <List className="no-scrollbar bg-black" height={400} itemCount={dbData.length} itemSize={50} width="100%">
+      <List className="no-scrollbar" height={400} itemCount={dbData.length} itemSize={50} width="100%">
         {Row}
       </List>
     </div>

@@ -1,7 +1,4 @@
-body{
-  background-color: black;
-  color: white;
-}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -4,6 +4,8 @@ import TableData from "../../widgets/table";
 import { useForm } from "react-hook-form";
 import postData from "../../services/postData";
 import Header from "../../widgets/Header";
+import Footer from "../../widgets/Footer";
+import { useThemeStore } from "../../store/theme-store";
 
 function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
   getData()
@@ -20,6 +22,7 @@ function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
 }
 
 function MainPage() {
+  const isBlackTheme = useThemeStore((value) => value.isBlack )
   const [dbData, setDbData] = useState([]);
   let [keys, setKeys] = useState<string[]>([]);
   const [AddDataRequset,setAddDataRequset] = useState(false);
@@ -81,14 +84,16 @@ function MainPage() {
                     <input
                       {...formNewData.register(item)}
                       name={item}
-                      className="border px-[10px] rounded"
+                      className={`border px-[10px] rounded placeholder:text-gray-500`}
                       placeholder={item}
                       type="text"
                     />
                   </div>
                 ))}
               </div>
-              <button disabled={AddDataRequset} className="border disabled:text-gray-600 disabled:cursor-not-allowed cursor-pointer rounded bg-black hover:bg-white hover:text-black w-fit px-[10px]">
+              <button disabled={AddDataRequset} className="border
+               disabled:text-gray-600 disabled:cursor-not-allowed 
+               cursor-pointer rounded hover:bg-white hover:text-black w-fit px-[10px]">
                 Добавить данные
               </button>
             </form>
@@ -107,12 +112,14 @@ function MainPage() {
           >
             <input
               {...formPole.register("pole")}
-              className="border px-[10px] max-w-[300px]"
+              className="border px-[10px] max-w-[300px] placeholder:text-gray-500"
               type="text"
               
               placeholder="Новое поле"
             />
-            <button className="w-fit border disabled:text-gray-600 disabled:cursor-not-allowed rounded cursor-pointer bg-black hover:bg-white hover:text-black px-[20px]">
+            <button className={`w-fit border
+             disabled:text-gray-600 disabled:cursor-not-allowed 
+             rounded cursor-pointer hover:bg-${isBlackTheme ? "white" : "black"} hover:text-${isBlackTheme ? "black" : "white"} px-[20px]`}>
               Добавить новое поле
             </button>
           </form>
@@ -123,6 +130,7 @@ function MainPage() {
           <TableData dbData={dbData}></TableData>
          : <span>Загрузка данных</span>}
         </div>
+        <Footer></Footer>
       </div>
     </>
   );

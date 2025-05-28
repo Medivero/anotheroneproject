@@ -1,11 +1,16 @@
 import './App.css'
 import MainPage from './pages/MainPage/MainPage'
+import { useThemeStore } from './store/theme-store'
 
 function App() {
-  
+  const isBlackTheme = useThemeStore((value) => value.isBlack )
+  let classname = `${isBlackTheme ? "bg-black text-white" : "bg-white text-black"} 
+  transition-all duration-1000`
   return (
     <>
+    <div className={classname} >
       <MainPage></MainPage>
+    </div>
     </>
   )
 }
