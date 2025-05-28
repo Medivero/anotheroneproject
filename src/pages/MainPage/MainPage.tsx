@@ -3,6 +3,7 @@ import { getData } from "../../services/getData";
 import TableData from "../../widgets/table";
 import { useForm } from "react-hook-form";
 import postData from "../../services/postData";
+import Header from "../../widgets/Header";
 
 function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
   getData()
@@ -56,12 +57,12 @@ function MainPage() {
     newKeys.push(pole);
     setKeys(newKeys);
   };
+
   return (
     <>
       <div className="p-[20px] flex flex-col gap-[20px]">
-        <div className="w-full flex justify-center">
-          <span className="text-[36px]">Таблица данных</span>
-        </div>
+        <Header></Header>
+        <div className="border-b"></div>
         <span>Хотите добавить данные? Введите их в ячейки</span>
         <div className="flex gap-[20px]">
           {keys ? (
@@ -92,9 +93,12 @@ function MainPage() {
               </button>
             </form>
           ) : (
-            ""
+            <>
+            <div>Загрузка полей...</div>
+            </>
           )}
         </div>
+        <div className="border-b"></div>
         <div className="flex flex-col">
           <span>Добавить новое поле?</span>
           <form
@@ -113,8 +117,11 @@ function MainPage() {
             </button>
           </form>
         </div>
-        <div className="p-[30px] bg-gray-600 rounded-lg">
+        <div className="border-b "></div>
+        <div className="lg:p-[10px] rounded-lg">
+          {dbData ? 
           <TableData dbData={dbData}></TableData>
+         : <span>Загрузка данных</span>}
         </div>
       </div>
     </>
