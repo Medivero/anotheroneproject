@@ -9,6 +9,7 @@
 5. react-window (виртуализация) 
 6. tailwindcss (быстрые стили)
 7. json-server
+8. Zustand
 
 ## Как запустить?
 

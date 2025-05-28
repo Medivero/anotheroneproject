@@ -15,15 +15,7 @@ export default function TableData({ dbData }: { dbData: any[] }) {
     }
   }, [dbData]);
   useEffect(() => {
-    if (allKeys.length>13){
-      setTextSizeState(10)
-    }
-    else if (allKeys.length > 10){
-      setTextSizeState(12)
-    }
-    else if (allKeys.length > 5){
-      setTextSizeState(15)
-    }
+    setTextSizeState(30-allKeys.length)
   },[allKeys])
   const Row = ({
     index,
@@ -38,8 +30,8 @@ export default function TableData({ dbData }: { dbData: any[] }) {
         {allKeys.map((key) => (
           <div
             key={key}
-            className={`text-[${textSizeState-3}px] lg:text-[${textSizeState}px] lg:p-[5px]`}
-            style={ { flex: 1, borderRight: "1px solid",wordBreak:"break-word" }}
+            className={` lg:p-[5px]`}
+            style={ {fontSize: textSizeState,flex: 1, borderRight: "1px solid",wordBreak:"break-word" }}
           >
             {row[key]}
           </div>
@@ -59,8 +51,8 @@ export default function TableData({ dbData }: { dbData: any[] }) {
         {allKeys.map((key) => (
           <div
             key={key}
-            className={`text-[${textSizeState-3}px] lg:text-[${textSizeState}px] lg:p-[5px]`}
-            style={{ flex: 1, borderRight: "1px solid",wordBreak:"break-word" }}
+            className={`lg:p-[5px]`}
+            style={{ fontSize: textSizeState, flex: 1, borderRight: "1px solid",wordBreak:"break-word" }}
           >
             {key}
           </div>

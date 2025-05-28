@@ -11,7 +11,7 @@ function Footer(){
         <div className="w-full h-[100px] flex justify-center items-center relative">
             <span>Приложение создано Medivero</span>
             <a href="https://github.com/Medivero" className="absolute right-0">
-                <img className=" w-[100px]" src={isBlackTheme? githubcatblack : githubcatwhite}></img>
+                <img className="w-[50px] lg:w-[100px]" src={isBlackTheme? githubcatblack : githubcatwhite}></img>
             </a>
         </div>
         </>

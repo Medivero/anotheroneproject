@@ -1,4 +1,9 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Tuffy:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+.tuffy-regular {
+  font-family: "Tuffy", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
