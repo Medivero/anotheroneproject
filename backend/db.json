@@ -1,7 +1,7 @@
 {
   "posts": [
     {
-      "id": "1",
+      "id": 1,
       "title": "a title",
       "views": 100,
       "name": "dima",
@@ -23,12 +23,8 @@
       "not_views": "4234"
     },
     {
-      "id": "5",
-      "title": "somethin new",
-      "not_views": 5555,
-      "agree": "7754",
-      "valid": "fdfasdfa",
-      "stalker": "asasaas"
+      "id": "4",
+      "title": "asafdasf"
     },
     {
       "id": "6",
@@ -67,49 +63,6 @@
       "title": "asdfa",
       "views": "asdf",
       "name": "asdf"
-    },
-    {
-      "id": "11",
-      "asdfas": "adf"
-    },
-    {
-      "id": "12",
-      "asdfasdfasdfasdf": "sdfasdf"
-    },
-    {
-      "42342": "4234",
-      "id": "13"
-    },
-    {
-      "4234": "53453",
-      "id": "14"
-    },
-    {
-      "4234": "24324",
-      "id": "15",
-      "afsdf": "423424"
-    },
-    {
-      "id": "16",
-      "afsdf": "42342"
-    },
-    {
-      "id": "17",
-      "afsdf": "24"
-    },
-    {
-      "id": "18",
-      "not_views": "fasdfs"
-    },
-    {
-      "id": "19",
-      "valid": "ф"
-    },
-    {
-      "id": "20"
-    },
-    {
-      "id": "21"
     }
   ]
 }

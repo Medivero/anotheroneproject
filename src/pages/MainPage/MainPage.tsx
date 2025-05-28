@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import postData from "../../services/postData";
 import Header from "../../widgets/Header";
 import Footer from "../../widgets/Footer";
-import { useThemeStore } from "../../store/theme-store";
+import NewPoleComponent from "./newPole";
+import DeleteDataComponent from "./deleteData";
 
 function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
   getData()
@@ -22,13 +23,11 @@ function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
 }
 
 function MainPage() {
-  const isBlackTheme = useThemeStore((value) => value.isBlack )
   const [dbData, setDbData] = useState([]);
   let [keys, setKeys] = useState<string[]>([]);
   const [AddDataRequset,setAddDataRequset] = useState(false);
 
   const formNewData = useForm();
-  const formPole = useForm();
 
   useEffect(() => {
     ResolveData({setDbData,setKeys,setAddDataRequset});
@@ -52,15 +51,6 @@ function MainPage() {
     postData(newobj);
     ResolveData({setDbData,setKeys,setAddDataRequset});
   };
-
-  const getNewPole = (data: any) => {
-    formPole.reset();
-    const pole = String(data["pole"]);
-    let newKeys = [...keys];
-    newKeys.push(pole);
-    setKeys(newKeys);
-  };
-
   return (
     <>
       <div className="p-[20px] flex flex-col gap-[20px]">
@@ -104,25 +94,9 @@ function MainPage() {
           )}
         </div>
         <div className="border-b"></div>
-        <div className="flex flex-col">
-          <span>Добавить новое поле?</span>
-          <form
-            onSubmit={formPole.handleSubmit(getNewPole)}
-            className="flex flex-col gap-[10px]"
-          >
-            <input
-              {...formPole.register("pole")}
-              className="border px-[10px] max-w-[300px] placeholder:text-gray-500"
-              type="text"
-              
-              placeholder="Новое поле"
-            />
-            <button className={`w-fit border
-             disabled:text-gray-600 disabled:cursor-not-allowed 
-             rounded cursor-pointer hover:bg-${isBlackTheme ? "white" : "black"} hover:text-${isBlackTheme ? "black" : "white"} px-[20px]`}>
-              Добавить новое поле
-            </button>
-          </form>
+        <div className="flex gap-[50px]">
+          <NewPoleComponent keys={keys} setKeys={setKeys}></NewPoleComponent>
+          <DeleteDataComponent></DeleteDataComponent>
         </div>
         <div className="border-b "></div>
         <div className="lg:p-[10px] rounded-lg">
