@@ -23,7 +23,7 @@ function NewPoleComponent({keys,setKeys}:{keys:Array<String>,setKeys:Function}){
                 {...formPole.register("pole")}
                 className="border px-[10px] max-w-[300px] placeholder:text-gray-500"
                 type="text"
-                
+                required
                 placeholder="Новое поле"
               />
               <button className={`w-fit border

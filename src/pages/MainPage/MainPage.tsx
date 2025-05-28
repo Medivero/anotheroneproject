@@ -7,8 +7,10 @@ import Header from "../../widgets/Header";
 import Footer from "../../widgets/Footer";
 import NewPoleComponent from "./newPole";
 import DeleteDataComponent from "./deleteData";
+//@ts-ignore
+import { useTypeNamesLikeAKeyboard } from "modulefortypetext/typetext.jsx"
 
-function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
+function ResolveData({setDbData, setKeys,setAddDataRequset}: {setDbData:Function,setKeys:Function,setAddDataRequset:Function}) {
   getData()
     .then((data) => {
       setDbData(data);
@@ -22,13 +24,16 @@ function ResolveData({setDbData, setKeys,setAddDataRequset}: any) {
     });
 }
 
+
 function MainPage() {
+  const textforAddData = ["Хотите добавить данные?", "Введите их в ячейки"]
+  const [spanAddData,setSpanAddData] = useState('');
   const [dbData, setDbData] = useState([]);
   let [keys, setKeys] = useState<string[]>([]);
   const [AddDataRequset,setAddDataRequset] = useState(false);
-
+    useTypeNamesLikeAKeyboard(textforAddData,setSpanAddData,100) // собственный npm модуль
+  
   const formNewData = useForm();
-
   useEffect(() => {
     ResolveData({setDbData,setKeys,setAddDataRequset});
   }, []);
@@ -56,7 +61,7 @@ function MainPage() {
       <div className="p-[20px] flex flex-col gap-[20px]">
         <Header></Header>
         <div className="border-b"></div>
-        <span>Хотите добавить данные? Введите их в ячейки</span>
+        <span className="h-[20px]">{spanAddData}</span>
         <div className="flex gap-[20px]">
           {keys ? (
             <form
