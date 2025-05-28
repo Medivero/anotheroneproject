@@ -9,6 +9,7 @@ import NewPoleComponent from "./newPole";
 import DeleteDataComponent from "./deleteData";
 //@ts-ignore
 import { useTypeNamesLikeAKeyboard } from "modulefortypetext/typetext.jsx"
+import { useThemeStore } from "../../store/theme-store";
 
 function ResolveData({setDbData, setKeys,setAddDataRequset}: {setDbData:Function,setKeys:Function,setAddDataRequset:Function}) {
   getData()
@@ -26,18 +27,22 @@ function ResolveData({setDbData, setKeys,setAddDataRequset}: {setDbData:Function
 
 
 function MainPage() {
+  const isBlackTheme = useThemeStore((value) => value.isBlack )
   const textforAddData = ["Хотите добавить данные?", "Введите их в ячейки"]
   const [spanAddData,setSpanAddData] = useState('');
   const [dbData, setDbData] = useState([]);
-  let [keys, setKeys] = useState<string[]>([]);
+  const [keys, setKeys] = useState<string[]>([]);
   const [AddDataRequset,setAddDataRequset] = useState(false);
-    useTypeNamesLikeAKeyboard(textforAddData,setSpanAddData,100) // собственный npm модуль
-  
+  const [stateOptionalFunctions,setStateOpFunctions] = useState(true);
+
+
   const formNewData = useForm();
   useEffect(() => {
     ResolveData({setDbData,setKeys,setAddDataRequset});
   }, []);
 
+  useTypeNamesLikeAKeyboard(textforAddData,setSpanAddData,100) // собственный npm модуль. тут первое это массив с текстом, второе это сеттер состояния и третье интервал
+  
   const getInputForm = (data: any) => {
     setAddDataRequset(false)
     formNewData.reset();
@@ -86,9 +91,11 @@ function MainPage() {
                   </div>
                 ))}
               </div>
-              <button disabled={AddDataRequset} className="border
+              <button disabled={AddDataRequset} className={`border
                disabled:text-gray-600 disabled:cursor-not-allowed 
-               cursor-pointer rounded hover:bg-white hover:text-black w-fit px-[10px]">
+               cursor-pointer rounded 
+               ${isBlackTheme ? "hover:bg-white hover:text-black" : "hover:bg-black hover:text-white"} 
+               w-fit px-[10px]`}>
                 Добавить данные
               </button>
             </form>
@@ -99,10 +106,13 @@ function MainPage() {
           )}
         </div>
         <div className="border-b"></div>
-        <div className="flex gap-[50px]">
-          <NewPoleComponent keys={keys} setKeys={setKeys}></NewPoleComponent>
-          <DeleteDataComponent></DeleteDataComponent>
-        </div>
+        <div className="flex flex-col gap-[20px] transition-all duration-500">
+          <div className={`flex gap-[50px] transition-[max-height] duration-500 overflow-hidden  ${stateOptionalFunctions ? "max-h-[0px]" : "max-h-[100px]"}`}>
+            <NewPoleComponent keys={keys} setKeys={setKeys}></NewPoleComponent>
+            <DeleteDataComponent></DeleteDataComponent>
+          </div>
+          <button onClick={() => setStateOpFunctions(!stateOptionalFunctions)} className={`border rounded cursor-pointer ${isBlackTheme ? "hover:bg-white hover:text-black" : "hover:bg-black hover:text-white"} w-fit px-[10px]`}>{!stateOptionalFunctions ? "Закрыть доп. функции" : "Открыть доп.функции"}</button>
+          </div>
         <div className="border-b "></div>
         <div className="lg:p-[10px] rounded-lg">
           {dbData ? 
