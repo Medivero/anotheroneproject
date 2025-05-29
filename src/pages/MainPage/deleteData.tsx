@@ -39,7 +39,7 @@ function DeleteDataComponent() {
         >
           <input
             type="number"
-            {...formId.register("id",{required:true,validate:(value) => !/[+-=-!?*+:,.]/.test(value)},)}
+            {...formId.register("id",{required:true,validate:(value) => !/[+-]/.test(value)},)}
             placeholder="Id"
             className="border px-[10px] w-[200px] placeholder:text-gray-500"
           ></input>
