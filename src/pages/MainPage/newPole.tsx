@@ -7,12 +7,13 @@ function NewPoleComponent(){
     const isBlackTheme = useThemeStore((value) => value.isBlack )
     const formPole = useForm();
     const getNewPole = (data: any) => {
-        formPole.reset();
-        const pole = String(data["pole"]);
-        let newKeys = [...keys];
-        newKeys.push(pole);
-        setKeys(newKeys)
-        
+      console.log(data)
+      formPole.reset();
+      const pole = String(data["pole"]);
+      let newKeys = [...keys];
+      newKeys.push(pole);
+      setKeys(newKeys)
+
     };
     return(
         <>
@@ -23,7 +24,7 @@ function NewPoleComponent(){
               className="flex flex-col gap-[10px]"
             >
               <input
-                {...formPole.register("pole")}
+                {...formPole.register("pole", {validate: (value) => !/["'`{}()=!?,.]/.test(value)})}
                 className="border px-[10px] max-w-[300px] placeholder:text-gray-500"
                 type="text"
                 required
