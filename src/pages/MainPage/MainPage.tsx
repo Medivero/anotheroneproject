@@ -15,7 +15,7 @@ const textforAddData = ["Хотите добавить данные?", "Введ
 
 function MainPage() {
   const isBlackTheme = useThemeStore((value) => value.isBlack);
-  const { dbData, keys, resolveData } = useDataStore();
+  const { dbData, keys, resolveData,setFlag } = useDataStore();
   const [spanAddData, setSpanAddData] = useState("");
   const [AddDataRequset, setAddDataRequset] = useState(false);
   const [stateOptionalFunctions, setStateOpFunctions] = useState(true);
@@ -52,7 +52,8 @@ function MainPage() {
     }
     try {
       await postData(newobj);
-      await resolveData();
+      resolveData();
+      setFlag()
       formNewData.reset();
     } catch (error) {
       console.log(error);

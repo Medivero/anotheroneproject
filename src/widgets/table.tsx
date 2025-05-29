@@ -1,12 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FixedSizeList as List } from "react-window"; 
 import "react-virtualized/styles.css";
+import { useDataStore } from "../store/DataStore";
 
 export default function TableData({ dbData }: { dbData: any[] }) {
   const [allKeys, setAllKeys] = useState<string[]>([]);
   const [textSizeState,setTextSizeState] = useState(0);
-  
-
+  const {flagToScroll} = useDataStore()
+  const listRef = useRef<List>(null);
+  const ScrollToBottom = () => {
+    listRef.current?.scrollToItem(dbData.length-1)
+  }
+  useEffect(() => {
+    ScrollToBottom()
+  },[flagToScroll])
   useEffect(() => {
     if (dbData) {
       setAllKeys(
@@ -58,7 +65,7 @@ export default function TableData({ dbData }: { dbData: any[] }) {
           </div>
         ))}
       </div>
-      <List className="no-scrollbar" height={400} itemCount={dbData.length} itemSize={50} width="100%">
+      <List ref={listRef} className="no-scrollbar" height={400} itemCount={dbData.length} itemSize={50} width="100%">
         {Row}
       </List>
     </div>
