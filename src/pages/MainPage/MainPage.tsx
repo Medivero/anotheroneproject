@@ -9,6 +9,7 @@ import { useTypeNamesLikeAKeyboard } from "modulefortypetext/typetext.jsx";
 import { useThemeStore } from "../../store/theme-store";
 import { useDataStore } from "../../store/DataStore";
 import NewDataComponent from "./addNewData";
+import DeleteColumnComponent from "./deleteColumn";
 
 const textforAddData = ["Хотите добавить данные?", "Введите их в ячейки"];
 
@@ -40,6 +41,7 @@ function MainPage() {
           >
             <NewPoleComponent></NewPoleComponent>
             <DeleteDataComponent></DeleteDataComponent>
+            <DeleteColumnComponent></DeleteColumnComponent>
           </div>
           <button
             onClick={() => setStateOpFunctions(!stateOptionalFunctions)}
