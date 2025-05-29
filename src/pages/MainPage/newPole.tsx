@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useThemeStore } from "../../store/theme-store";
+import { useDataStore } from "../../store/DataStore";
 
-function NewPoleComponent({keys,setKeys}:{keys:Array<String>,setKeys:Function}){
+function NewPoleComponent(){
+    const {keys,setKeys} = useDataStore() 
     const isBlackTheme = useThemeStore((value) => value.isBlack )
     const formPole = useForm();
     const getNewPole = (data: any) => {
@@ -9,7 +11,8 @@ function NewPoleComponent({keys,setKeys}:{keys:Array<String>,setKeys:Function}){
         const pole = String(data["pole"]);
         let newKeys = [...keys];
         newKeys.push(pole);
-        setKeys(newKeys);
+        setKeys(newKeys)
+        
     };
     return(
         <>

@@ -1,51 +1,35 @@
 import { useEffect, useState } from "react";
-import { getData } from "../../services/getData";
 import TableData from "../../widgets/table";
-import { useForm } from "react-hook-form";
-import postData from "../../services/postData";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { postData } from "../../services/postData";
 import Header from "../../widgets/Header";
 import Footer from "../../widgets/Footer";
 import NewPoleComponent from "./newPole";
 import DeleteDataComponent from "./deleteData";
 //@ts-ignore
-import { useTypeNamesLikeAKeyboard } from "modulefortypetext/typetext.jsx"
+import { useTypeNamesLikeAKeyboard } from "modulefortypetext/typetext.jsx";
 import { useThemeStore } from "../../store/theme-store";
+import { useDataStore } from "../../store/DataStore";
 
-function ResolveData({setDbData, setKeys,setAddDataRequset}: {setDbData:Function,setKeys:Function,setAddDataRequset:Function}) {
-  getData()
-    .then((data) => {
-      setDbData(data);
-      return data;
-    })
-    .then((data) => {
-      setKeys(
-        Array.from(new Set(data.flatMap((obj: String) => Object.keys(obj))))
-      );
-      setAddDataRequset(false)
-    });
-}
-
+const textforAddData = ["Хотите добавить данные?", "Введите их в ячейки"];
 
 function MainPage() {
-  const isBlackTheme = useThemeStore((value) => value.isBlack )
-  const textforAddData = ["Хотите добавить данные?", "Введите их в ячейки"]
-  const [spanAddData,setSpanAddData] = useState('');
-  const [dbData, setDbData] = useState([]);
-  const [keys, setKeys] = useState<string[]>([]);
-  const [AddDataRequset,setAddDataRequset] = useState(false);
-  const [stateOptionalFunctions,setStateOpFunctions] = useState(true);
-
+  const isBlackTheme = useThemeStore((value) => value.isBlack);
+  const { dbData, keys, resolveData } = useDataStore();
+  const [spanAddData, setSpanAddData] = useState("");
+  const [AddDataRequset, setAddDataRequset] = useState(false);
+  const [stateOptionalFunctions, setStateOpFunctions] = useState(true);
 
   const formNewData = useForm();
+
   useEffect(() => {
-    ResolveData({setDbData,setKeys,setAddDataRequset});
+    resolveData();
   }, []);
 
-  useTypeNamesLikeAKeyboard(textforAddData,setSpanAddData,100) // собственный npm модуль. тут первое это массив с текстом, второе это сеттер состояния и третье интервал
-  
-  const getInputForm = (data: any) => {
-    setAddDataRequset(false)
-    formNewData.reset();
+  useTypeNamesLikeAKeyboard(textforAddData, setSpanAddData, 100); // собственный npm модуль. тут первое это массив с текстом, второе это сеттер состояния и третье интервал
+
+  const getInputForm: SubmitHandler<any> = async (data) => {
+    setAddDataRequset(true);
     let newobj: any = {};
     const lastId = dbData[dbData.length - 1]["id"];
     for (const key in data) {
@@ -53,13 +37,28 @@ function MainPage() {
         newobj[key] = data[key];
       }
     }
+    if (Object.keys(data).length === 0) {
+      setAddDataRequset(false);
+      return;
+    }
     console.log(newobj);
     /**
      * По хорошему счетчиком ID должна заниматься база данных, но так как я работаю с json-server, то делаю это на клиенте.
      */
-    newobj["id"] = String(Number(lastId) + 1);
-    postData(newobj);
-    ResolveData({setDbData,setKeys,setAddDataRequset});
+    if (lastId) {
+      newobj["id"] = String(Number(lastId) + 1);
+    } else {
+      newobj["id"] = String(1);
+    }
+    try {
+      await postData(newobj);
+      await resolveData();
+      formNewData.reset();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAddDataRequset(false);
+    }
   };
   return (
     <>
@@ -72,52 +71,74 @@ function MainPage() {
             <form
               onSubmit={formNewData.handleSubmit(getInputForm)}
               className="w-full flex flex-col gap-[20px]"
+              noValidate
             >
               <div className="flex flex-wrap gap-[10px]">
-                {keys.map((item) => (
-                  <div
+                {keys.map((item: any) => (
+                  <input
+                    {...formNewData.register(item)}
+                    name={item}
                     key={item}
-                    className={`${
+                    className={`border px-[10px] rounded placeholder:text-gray-500 ${
                       item === "id" ? "hidden" : ""
-                    } flex w-[100px] flex-col gap-[2.5px] `}
-                  >
-                    <input
-                      {...formNewData.register(item)}
-                      name={item}
-                      className={`border px-[10px] rounded placeholder:text-gray-500`}
-                      placeholder={item}
-                      type="text"
-                    />
-                  </div>
+                    } w-[100px]`}
+                    placeholder={item}
+                    type="text"
+                  />
                 ))}
               </div>
-              <button disabled={AddDataRequset} className={`border
+              <button
+                type="submit"
+                disabled={AddDataRequset}
+                className={`border
                disabled:text-gray-600 disabled:cursor-not-allowed 
-               cursor-pointer rounded 
-               ${isBlackTheme ? "hover:bg-white hover:text-black" : "hover:bg-black hover:text-white"} 
-               w-fit px-[10px]`}>
+               cursor-pointer rounded
+               ${
+                 isBlackTheme
+                   ? "hover:bg-white hover:text-black"
+                   : "hover:bg-black hover:text-white"
+               } 
+               w-fit px-[10px]`}
+              >
                 Добавить данные
               </button>
             </form>
           ) : (
             <>
-            <div>Загрузка полей...</div>
+              <div>Загрузка полей...</div>
             </>
           )}
         </div>
         <div className="border-b"></div>
         <div className="flex flex-col gap-[20px] transition-all duration-500">
-          <div className={`flex gap-[50px] transition-[max-height] duration-500 overflow-hidden  ${stateOptionalFunctions ? "max-h-[0px]" : "max-h-[100px]"}`}>
-            <NewPoleComponent keys={keys} setKeys={setKeys}></NewPoleComponent>
+          <div
+            className={`flex gap-[50px] transition-[max-height] duration-500 overflow-hidden  ${
+              stateOptionalFunctions ? "max-h-[0px]" : "max-h-[100px]"
+            }`}
+          >
+            <NewPoleComponent></NewPoleComponent>
             <DeleteDataComponent></DeleteDataComponent>
           </div>
-          <button onClick={() => setStateOpFunctions(!stateOptionalFunctions)} className={`border rounded cursor-pointer ${isBlackTheme ? "hover:bg-white hover:text-black" : "hover:bg-black hover:text-white"} w-fit px-[10px]`}>{!stateOptionalFunctions ? "Закрыть доп. функции" : "Открыть доп.функции"}</button>
-          </div>
+          <button
+            onClick={() => setStateOpFunctions(!stateOptionalFunctions)}
+            className={`border rounded cursor-pointer ${
+              isBlackTheme
+                ? "hover:bg-white hover:text-black"
+                : "hover:bg-black hover:text-white"
+            } w-fit px-[10px]`}
+          >
+            {!stateOptionalFunctions
+              ? "Закрыть доп. функции"
+              : "Открыть доп.функции"}
+          </button>
+        </div>
         <div className="border-b "></div>
         <div className="lg:p-[10px] rounded-lg">
-          {dbData ? 
-          <TableData dbData={dbData}></TableData>
-         : <span>Загрузка данных</span>}
+          {dbData ? (
+            <TableData dbData={dbData}></TableData>
+          ) : (
+            <span>Загрузка данных</span>
+          )}
         </div>
         <Footer></Footer>
       </div>

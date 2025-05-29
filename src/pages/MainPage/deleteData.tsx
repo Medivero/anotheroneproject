@@ -1,20 +1,22 @@
 import { useForm } from "react-hook-form";
 import { useThemeStore } from "../../store/theme-store";
-import deleteDataById from "../../services/deleteData";
+import {deleteDataById} from "../../services/deleteData";
 import { useEffect, useState } from "react";
+import { useDataStore } from "../../store/DataStore";
 
 function DeleteDataComponent() {
   const isBlackTheme = useThemeStore((value) => value.isBlack);
   const [responseState, setResponseState] = useState("");
+  const {resolveData} = useDataStore();
   const [errorState, setErrorState] = useState(false);
   const [ismounted, setismounted] = useState(false);
   const formId = useForm();
-  const getInputForm = (data: any) => {
+  const getInputForm = async (data: any) => {
     formId.reset();
     const id = String(data["id"]);
-    deleteDataById(id).then((res) => {
-      setResponseState(res);
-    });
+    const res = await deleteDataById(id)
+    setResponseState(res);
+    await resolveData();
   };
   useEffect(() => {
     if (ismounted) {
@@ -36,15 +38,14 @@ function DeleteDataComponent() {
           className="flex flex-col gap-[10px]"
         >
           <input
-            required
             type="number"
-            {...formId.register("id")}
+            {...formId.register("id",{required:true})}
             placeholder="Id"
             className="border px-[10px] w-[200px] placeholder:text-gray-500"
           ></input>
           <div className="flex gap-[20px]">
             <button
-              className={`w-fit border
+              type="submit" className={`w-fit border
                         disabled:text-gray-600 disabled:cursor-not-allowed 
                         rounded cursor-pointer hover:bg-${
                           isBlackTheme ? "white" : "black"
