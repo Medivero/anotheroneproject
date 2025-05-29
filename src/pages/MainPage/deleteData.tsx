@@ -15,8 +15,10 @@ function DeleteDataComponent() {
     formId.reset();
     const id = String(data["id"]);
     const res = await deleteDataById(id)
-    setResponseState(res);
-    await resolveData();
+    if (!res.ok){
+      setResponseState(res)
+    }
+    resolveData();
   };
   useEffect(() => {
     if (ismounted) {
