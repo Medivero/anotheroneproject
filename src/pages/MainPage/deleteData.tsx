@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useThemeStore } from "../../store/theme-store";
-import {deleteDataById} from "../../services/deleteData";
 import { useEffect, useState } from "react";
 import { useDataStore } from "../../store/DataStore";
+import { deleteDataById } from "../../services/deleteData";
 
 function DeleteDataComponent() {
   const isBlackTheme = useThemeStore((value) => value.isBlack);
@@ -14,7 +14,7 @@ function DeleteDataComponent() {
   const getInputForm = async (data: any) => {
     formId.reset();
     const id = String(data["id"]);
-    const res = await deleteDataById(id)
+    const res:any = await deleteDataById(id)
     if (!res.ok){
       setResponseState(res)
     }
@@ -34,7 +34,7 @@ function DeleteDataComponent() {
   return (
     <>
       <div className="flex flex-col">
-        <span>Может удалить какую-то запись?</span>
+        <span className="tuffy-bold text-[20px]">Может удалить какую-то запись?</span>
         <form
           onSubmit={formId.handleSubmit(getInputForm)}
           className="flex flex-col gap-[10px]"

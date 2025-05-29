@@ -18,7 +18,7 @@ function NewPoleComponent(){
     return(
         <>
         <div className="flex flex-col">
-            <span>Добавить новое поле? </span>
+            <span className="tuffy-bold text-[20px]">Добавить новое поле? </span>
             <form
               onSubmit={formPole.handleSubmit(getNewPole)}
               className="flex flex-col gap-[10px]"

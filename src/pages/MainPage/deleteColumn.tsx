@@ -2,8 +2,10 @@ import { useForm } from "react-hook-form";
 import { useDataStore } from "../../store/DataStore";
 import { deleteColumnFromBd } from "../../services/deleteColumn";
 import { useEffect, useState } from "react";
+import { useThemeStore } from "../../store/theme-store";
 
 function DeleteColumnComponent(){
+      const isBlackTheme = useThemeStore((value) => value.isBlack);
     const {keys,resolveData} = useDataStore();
     const FormSelect = useForm()
     const [newKeys,setNewKeys] = useState<string[]>([])
@@ -20,15 +22,21 @@ function DeleteColumnComponent(){
     return (
         <>
         <div className="flex flex-col">
-            <span>Хотите удалить колонку?</span>
+            <span className="tuffy-bold text-[20px]">Хотите удалить колонку?</span>
             {newKeys ? 
-            <form onSubmit={FormSelect.handleSubmit(getSelectedColumn)} className="flex flex-col gap-[20px]">
-                <select {...FormSelect.register("selectsomething",{required:true})} className="border rounded">
+            <form onSubmit={FormSelect.handleSubmit(getSelectedColumn)} className="flex flex-col gap-[10px]">
+                <select {...FormSelect.register("selectsomething",{required:true})} className="border">
                     {newKeys.map((item) => (
                         <option className={`${item === "id" ? "hidden" : ""}`} key={item} value={item}>{item}</option>
                     ))}
                 </select>
-                <button type="submit" className="border rounded w-[150px]">Удалить колонку</button>
+                <button type="submit" className={`w-fit border
+                        disabled:text-gray-600 disabled:cursor-not-allowed 
+                        rounded cursor-pointer hover:bg-${
+                          isBlackTheme ? "white" : "black"
+                        } hover:text-${
+                isBlackTheme ? "black" : "white"
+              } px-[20px]`}>Удалить колонку</button>
             </form>
             : <span>Загрузка селектора</span>}
         </div>

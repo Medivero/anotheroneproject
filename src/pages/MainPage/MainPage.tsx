@@ -30,19 +30,23 @@ function MainPage() {
       <div className="p-[20px] flex flex-col gap-[20px]">
         <Header></Header>
         <div className="border-b"></div>
-        <span className="h-[20px]">{spanAddData}</span>
+        <span className="h-[20px] tuffy-bold text-[20px]">{spanAddData}</span>
         <NewDataComponent></NewDataComponent>
         <div className="border-b"></div>
         <div className="flex flex-col gap-[20px] transition-all duration-500">
           <div
-            className={`flex gap-[50px] transition-[max-height] duration-1000 flex-wrap overflow-hidden  ${
+            className={`flex gap-[30px] transition-[max-height] duration-1000 flex-wrap overflow-hidden  ${
               stateOptionalFunctions ? "max-h-[0px]" : "max-h-[300px]"
             }`}
           >
             <NewPoleComponent></NewPoleComponent>
+            <div className="border-l "></div>
             <DeleteDataComponent></DeleteDataComponent>
+            <div className="border-l "></div>
+
             <DeleteColumnComponent></DeleteColumnComponent>
           </div>
+          <div className="border-b"></div>
           <button
             onClick={() => setStateOpFunctions(!stateOptionalFunctions)}
             className={`border rounded cursor-pointer ${
