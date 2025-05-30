@@ -27,6 +27,6 @@ describe("postData", () => {
     };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(mockres as Response));
 
-    await expect(postData(form)).rejects.toThrow("error");
+    await expect(postData(form)).rejects.toThrow(`Ошибка 500`);
   });
 })
