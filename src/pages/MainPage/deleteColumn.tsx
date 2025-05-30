@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { useThemeStore } from "../../store/theme-store";
 
 function DeleteColumnComponent(){
-      const isBlackTheme = useThemeStore((value) => value.isBlack);
+    const isBlackTheme = useThemeStore((value) => value.isBlack);
+    const [blockButton,setBlockButton] = useState(false);
     const {keys,resolveData} = useDataStore();
     const FormSelect = useForm()
     const [newKeys,setNewKeys] = useState<string[]>([])
@@ -14,9 +15,19 @@ function DeleteColumnComponent(){
         setNewKeys(tempkeys);
     },[keys])
     const getSelectedColumn = async (data:any) => {
+        setBlockButton(true)
         const key = data["selectsomething"]
         await deleteColumnFromBd(key)
-        await resolveData();
+        try{
+            resolveData();
+        } catch(error){
+            console.log(error)
+        }
+        finally{
+            setTimeout(() => {
+                setBlockButton(false)
+            },1000)
+        }
     }
 
     return (
@@ -30,7 +41,7 @@ function DeleteColumnComponent(){
                         <option className={`${item === "id" ? "hidden" : ""}`} key={item} value={item}>{item}</option>
                     ))}
                 </select>
-                <button type="submit" className={`w-fit border
+                <button disabled={blockButton} type="submit" className={`w-fit border
                         disabled:text-gray-600 disabled:cursor-not-allowed 
                         rounded cursor-pointer hover:bg-${
                           isBlackTheme ? "white" : "black"

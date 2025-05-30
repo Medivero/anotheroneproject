@@ -8,6 +8,7 @@ function NewDataComponent() {
   const [AddDataRequset, setAddDataRequset] = useState(false);
   const { dbData, keys, resolveData, setFlag } = useDataStore();
   const isBlackTheme = useThemeStore((value) => value.isBlack);
+  const [checkBox,setCheckBox] = useState(false)
 
   const getInputForm: SubmitHandler<any> = async (data) => {
     setAddDataRequset(true);
@@ -18,9 +19,15 @@ function NewDataComponent() {
         newobj[key] = data[key];
       }
     }
-    if (Object.keys(data).length === 0) {
+    if (Object.keys(newobj).length === 0) {
       setAddDataRequset(false);
       return;
+    }
+    if (checkBox){
+      if (Object.keys(newobj).length < 6){
+        alert(`Заполненных полей должно быть больше! ${Object.keys(newobj).length}/5`)
+        return
+      }
     }
     console.log(newobj);
     /**
@@ -39,13 +46,19 @@ function NewDataComponent() {
     } catch (error) {
       console.log(error);
     } finally {
-      setAddDataRequset(false);
+      setTimeout(() => {
+        setAddDataRequset(false); // вынужденный сетаймаут, чтобы показать что блокировка кнопка добавления блокируется.
+      },1000)
     }
   };
   const formNewData = useForm();
   return (
     <>
-      <div className="flex gap-[20px]">
+      <div className="flex gap-[20px] flex-col items-start">
+        <div className="flex gap-[10px]">
+          <span>Ограничить на минимальное количество полей? (5)</span>
+          <input className="w-[20px] h-[20px]" checked={checkBox} type="checkbox" onChange={() => setCheckBox(!checkBox)}></input>
+        </div>
         {keys ? (
           <form
             onSubmit={formNewData.handleSubmit(getInputForm)}

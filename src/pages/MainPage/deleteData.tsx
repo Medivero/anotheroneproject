@@ -10,15 +10,26 @@ function DeleteDataComponent() {
   const {resolveData} = useDataStore();
   const [errorState, setErrorState] = useState(false);
   const [ismounted, setismounted] = useState(false);
+  const [blockButton,setBlockButton] = useState(false)
   const formId = useForm();
   const getInputForm = async (data: any) => {
+    setBlockButton(true);
     formId.reset();
     const id = String(data["id"]);
     const res:any = await deleteDataById(id)
     if (!res.ok){
       setResponseState(res)
     }
-    resolveData();
+    try{
+      await resolveData();
+    } catch(error){
+      console.error(error)
+    }
+    finally{
+      setTimeout(() => {
+        setBlockButton(false)
+      },1000)
+    }
   };
   useEffect(() => {
     if (ismounted) {
@@ -43,11 +54,13 @@ function DeleteDataComponent() {
             type="number"
             {...formId.register("id",{required:true,validate:(value) => !/[+-]/.test(value)},)}
             placeholder="Id"
+            
             className="border px-[10px] w-[200px] placeholder:text-gray-500"
           ></input>
           <div className="flex gap-[20px]">
             <button
-              type="submit" className={`w-fit border
+              type="submit" disabled={blockButton} className={`w-fit border
+                
                         disabled:text-gray-600 disabled:cursor-not-allowed 
                         rounded cursor-pointer hover:bg-${
                           isBlackTheme ? "white" : "black"

@@ -28,7 +28,7 @@ function Header(){
                       style={{borderColor:`${isBlackTheme ? "white" : "black"}`}}>
             <div className={`h-full relative transition-all duration-500 
               w-[40px] lg:w-[50px] flex justify-center items-center bg-${isBlackTheme ? "white" : "black"} rounded-[50%]`} style={{transform:`translateX(${isBlackTheme ? "0" : "150"}%)`}}>
-                <img className={`w-[45px] transition-opacity duration-300 ${startAnimState ? "opacity-0" : "opacity-100"}`} src={isBlackTheme? black_sun : moon_white} alt="" />
+                <img className={`w-[45px] transition-all hover:rotate-360 not-hover:duration-2000 hover:duration-2000 duration-300 ${startAnimState ? "opacity-0" : "opacity-100"}`} src={isBlackTheme? black_sun : moon_white} alt="" />
               </div>
           </button>
         </div>

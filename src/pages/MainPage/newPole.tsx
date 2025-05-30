@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useThemeStore } from "../../store/theme-store";
 import { useDataStore } from "../../store/DataStore";
 
+// Здесь нет блокатора кнопки, так как нет обращения к серверу.
+
 function NewPoleComponent(){
     const {keys,setKeys} = useDataStore() 
     const isBlackTheme = useThemeStore((value) => value.isBlack )
@@ -10,10 +12,13 @@ function NewPoleComponent(){
       console.log(data)
       formPole.reset();
       const pole = String(data["pole"]);
+      if (keys.includes(pole)){
+        alert("Поле уже существует!")
+        return
+      }
       let newKeys = [...keys];
       newKeys.push(pole);
       setKeys(newKeys)
-
     };
     return(
         <>
@@ -24,10 +29,10 @@ function NewPoleComponent(){
               className="flex flex-col gap-[10px]"
             >
               <input
-                {...formPole.register("pole", {validate: (value) => !/["'`{}()=!?,.]/.test(value)})}
+                {...formPole.register("pole", {required:true,validate: (value) => !/["'`{}()=!?,.]/.test(value)})}
                 className="border px-[10px] max-w-[300px] placeholder:text-gray-500"
                 type="text"
-                required
+                
                 placeholder="Новое поле"
               />
               <button className={`w-fit border

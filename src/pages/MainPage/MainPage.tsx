@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TableData from "../../widgets/table";
+import TableData from "../../widgets/table/table";
 import Header from "../../widgets/Header";
 import Footer from "../../widgets/Footer";
 import NewPoleComponent from "./newPole";
