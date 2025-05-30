@@ -3,13 +3,13 @@ import { describe, expect, test, vi } from 'vitest';
 
 describe('getData', () => {
   test('get data', async () => {
-    const mockResponse = [
+    const mockres = [
         { id: 1, title: 'aaaa' },
         {id: 2, title: 'fasdfsafafs'}
     ];
 
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      json: vi.fn().mockResolvedValueOnce(mockResponse),
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
+      json: vi.fn().mockResolvedValueOnce(mockres),
     }) as any;
 
     const data = await getData();
@@ -17,13 +17,13 @@ describe('getData', () => {
     expect(fetch).toHaveBeenCalledWith(expect.stringContaining('posts'), {
       method: 'GET',
     });
-    expect(data).toEqual(mockResponse);
+    expect(data).toEqual(mockres);
   });
 
   test('throw JSON failure', async () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-    global.fetch = vi.fn().mockResolvedValueOnce({
+    globalThis.fetch = vi.fn().mockResolvedValueOnce({
       json: vi.fn().mockRejectedValueOnce(new Error('something wrong with JSON')),
     }) as any;
 
