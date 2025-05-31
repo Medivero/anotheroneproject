@@ -1,72 +1,43 @@
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import TableData from "../../widgets/table/table";
 import Header from "../../widgets/Header";
 import Footer from "../../widgets/Footer";
-import NewPoleComponent from "./newPole";
-import DeleteDataComponent from "./deleteData";
-//@ts-ignore
-import { useTypeNamesLikeAKeyboard } from "modulefortypetext/typetext.jsx";
-import { useThemeStore } from "../../store/theme-store";
-import { useDataStore } from "../../store/DataStore";
-import NewDataComponent from "./addNewData";
-import DeleteColumnComponent from "./deleteColumn";
 
-const textforAddData = ["Хотите добавить данные?", "Введите их в ячейки"];
+import plus from "/src/assets/icons/plus.svg";
+
+import { Modal} from "@mui/material";
+import ModalAddDataComponent from "../../widgets/addData/addDataModal";
+
+
+
 
 function MainPage() {
-  const isBlackTheme = useThemeStore((value) => value.isBlack);
-  const { dbData, resolveData } = useDataStore();
-  const [spanAddData, setSpanAddData] = useState("");
-  const [stateOptionalFunctions, setStateOpFunctions] = useState(true);
-
-  useEffect(() => {
-    resolveData();
-  }, []);
-
-  useTypeNamesLikeAKeyboard(textforAddData, setSpanAddData, 100); // собственный npm модуль. тут первое это массив с текстом, второе это сеттер состояния и третье интервал
-
+  const [isMenu, setIsMenu] = useState(false);
+  
   return (
     <>
-      <div className="p-[20px] flex flex-col gap-[20px]">
+      <div className="p-[5px] flex flex-col gap-[20px] relative">
         <Header></Header>
-        <div className="border-b"></div>
-        <span className="h-[20px] tuffy-bold text-[20px]">{spanAddData}</span>
-        <NewDataComponent></NewDataComponent>
-        <div className="border-b"></div>
-        <div className="flex flex-col gap-[20px] transition-all duration-500">
+        <Modal
+          open={isMenu}
+          onClose={() => setIsMenu(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <ModalAddDataComponent setIsMenu={setIsMenu}></ModalAddDataComponent>
+        </Modal>
+        <div className="w-full h-full">
           <div
-            className={`flex gap-[30px] transition-[max-height] duration-1000 flex-wrap overflow-hidden  ${
-              stateOptionalFunctions ? "max-h-[0px]" : "max-h-[300px]"
-            }`}
+            onClick={() => setIsMenu(!isMenu)}
+            className="w-[50px] h-[50px] cursor-pointer border p-[2px] rounded-lg"
           >
-            <NewPoleComponent></NewPoleComponent>
-            <div className="border-l "></div>
-            <DeleteDataComponent></DeleteDataComponent>
-            <div className="border-l "></div>
-
-            <DeleteColumnComponent></DeleteColumnComponent>
+            <img src={plus} alt="" />
           </div>
-          <div className="border-b"></div>
-          <button
-            onClick={() => setStateOpFunctions(!stateOptionalFunctions)}
-            className={`border rounded cursor-pointer ${
-              isBlackTheme
-                ? "hover:bg-white hover:text-black"
-                : "hover:bg-black hover:text-white"
-            } w-fit px-[10px]`}
-          >
-            {!stateOptionalFunctions
-              ? "Закрыть доп. функции"
-              : "Открыть доп.функции"}
-          </button>
         </div>
-        <div className="border-b "></div>
         <div className="lg:p-[10px] rounded-lg">
-          {dbData ? (
-            <TableData dbData={dbData}></TableData>
-          ) : (
-            <span>Загрузка данных</span>
-          )}
+          <Suspense fallback="loading">
+            <TableData></TableData>
+          </Suspense>
         </div>
         <Footer></Footer>
       </div>

@@ -12,7 +12,7 @@ describe('getData', () => {
       json: vi.fn().mockResolvedValueOnce(mockres),
     }) as any;
 
-    const data = await getData();
+    const data = await getData(1);
 
     expect(fetch).toHaveBeenCalledWith(expect.stringContaining('posts'), {
       method: 'GET',
@@ -27,7 +27,7 @@ describe('getData', () => {
       json: vi.fn().mockRejectedValueOnce(new Error('something wrong with JSON')),
     }) as any;
 
-    const data = await getData();
+    const data = await getData(1);
 
     expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
     expect(data).toBeUndefined();
