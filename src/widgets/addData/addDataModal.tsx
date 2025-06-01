@@ -57,7 +57,7 @@ export default function ModalAddDataComponent({setIsMenu}:{setIsMenu:Function}){
                     {userFields.map((item) => (
                         <Controller key={item.name} name={item.name} control={FieldForm.control} defaultValue=""
                         rules={{required: item.required}} render={({field}) => (
-                            <TextField required={item.required} type={item.type} {...field} label={item.type !== "date" ? item.name : ""}></TextField>
+                            <TextField required={item.required} type={item.type} {...field} label={item.type !== "date" ? item.label : ""}></TextField>
                         )}></Controller>
                     ))}
                 </div>
