@@ -41,9 +41,9 @@ export default function TableData() {
 
   return (
     <>
-      <div className="h-[800px]">
+      <div className="lg:h-[800px] h-[500px]">
         <TableVirtuoso
-          data={data}
+          data={data} className="lg:text-[15px] text-[10px]"
           endReached={() => {
             if (data.length < totalLength && !isloading) {
               requestData();
@@ -57,9 +57,9 @@ export default function TableData() {
                   key={item}
                   className={`${
                     item === "id" || item === "age"
-                    ? "w-[50px]"
-                    : "min-w-[100px]"
-                  } border h-[50px] bg-white text-black`}
+                    ? "lg:w-[50px] w-[20px]"
+                    : "lg:min-w-[100px] min-w-[50px]"
+                  } border-black h-[25px] lg:h-[50px] bg-white text-black`}
                   >
                   {item}
                 </th>
@@ -70,7 +70,7 @@ export default function TableData() {
             <>
               {fields.map((item) => (
                 
-                <td className="border text-center py-[20px]" key={item}>
+                <td className="border text-center break-words py-[20px]" key={item}>
                   <Suspense fallback="loading">
                     {typeof row[item] === "object"
                       ? JSON.stringify(row[item])

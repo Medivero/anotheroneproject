@@ -51,7 +51,7 @@ export default function ModalAddDataComponent({setIsMenu}:{setIsMenu:Function}){
             <Box component="form" onSubmit={FieldForm.handleSubmit(getData)} sx={{
               display: "flex",
               flexDirection: "column",
-              gap:"20px"
+              gap:"10px"
             }}>
                 <div className="flex gap-[10px] flex-wrap">
                     {userFields.map((item) => (
